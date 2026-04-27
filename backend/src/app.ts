@@ -15,7 +15,7 @@ app.use('/api', routes);
 app.use('/avatars', express.static(avatarService.directory));
 
 app.get('/', (_req, res) => {
-    return sendSuccess(res, { message: 'Yorumi Backend is running' });
+    return sendSuccess(res, { message: 'Anistream Backend is running' });
 });
 
 app.use(notFoundHandler);
