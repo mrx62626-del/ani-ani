@@ -23,6 +23,26 @@ export default function HomePage() {
     useEffect(() => {
         anime.fetchHomeData();
     }, []);
+    
+    // 👇 ADD HERE (exact spot)
+    useEffect(() => {
+        const triggerPopunder = () => {
+            if ((window as any).__popunderLoaded) return;
+            (window as any).__popunderLoaded = true;
+    
+            const script = document.createElement('script');
+            script.src = "https://environmenttalentrabble.com/70/85/65/70856524414102f52984aa7b86876fee.js";
+            script.async = true;
+    
+            document.body.appendChild(script);
+        };
+    
+        document.addEventListener('click', triggerPopunder, { once: true });
+    
+        return () => {
+            document.removeEventListener('click', triggerPopunder);
+        };
+    }, []);
 
     // Navigation Handlers
     const toPositiveNumber = (value: unknown): number => {
