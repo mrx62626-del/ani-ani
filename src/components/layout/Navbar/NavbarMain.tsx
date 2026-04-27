@@ -187,49 +187,123 @@ export default function Navbar({
 
     return (
         <>
-        <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled || !isTransparentPage
-            ? 'bg-[#0a0a0a]/72 backdrop-blur-xl border-b border-transparent py-3'
-            : 'bg-gradient-to-b from-black via-black/60 to-transparent border-transparent py-4'
-            }`}>
-            <div className="px-4 md:px-8 flex items-center justify-between">
-                {/* LEFT: Logo + Search + Toggle + Random */}
-                <div className="flex items-center gap-4 md:gap-6">
-                    <button
-                        onClick={() => {
-                            setShowMobileMenu(true);
-                            setShowMobileSearch(false);
-                        }}
-                        className="w-9 h-9 text-white/95 rounded-md flex items-center justify-center transition-colors"
-                        aria-label="Open menu"
-                    >
-                        <Menu className="w-5 h-5" />
-                    </button>
-                    <div className="flex items-center gap-2">
-                        {/* Logo */}
-                    <div
-                        onClick={onLogoClick || onClearSearch}
-                        className="flex items-center cursor-pointer hover:opacity-90 transition-opacity select-none shrink-0"
-                        role="button"
-                        tabIndex={0}
-                    >
-                        <span className="text-xl md:text-2xl font-black text-white tracking-tighter">YORU</span>
-                        <span className={`text-xl md:text-2xl font-black ${activeTab === 'manga' ? 'text-yorumi-manga' : 'text-yorumi-accent'} tracking-tighter`}>MI</span>
-                    </div>
+            <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled || !isTransparentPage
+                ? 'bg-[#0a0a0a]/72 backdrop-blur-xl border-b border-transparent py-3'
+                : 'bg-gradient-to-b from-black via-black/60 to-transparent border-transparent py-4'
+                }`}>
+                <div className="px-4 md:px-8 flex items-center justify-between">
+                    {/* LEFT: Logo + Search + Toggle + Random */}
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <button
+                            onClick={() => {
+                                setShowMobileMenu(true);
+                                setShowMobileSearch(false);
+                            }}
+                            className="w-9 h-9 text-white/95 rounded-md flex items-center justify-center transition-colors"
+                            aria-label="Open menu"
+                        >
+                            <Menu className="w-5 h-5" />
+                        </button>
+                        <div className="flex items-center gap-2">
+                            {/* Logo */}
+                            <div
+                                onClick={onLogoClick || onClearSearch}
+                                className="flex items-center cursor-pointer hover:opacity-90 transition-opacity select-none shrink-0"
+                                role="button"
+                                tabIndex={0}
+                            >
+                                <span className="text-xl md:text-2xl font-black text-white tracking-tighter">An!</span>
+                                <span className={`text-xl md:text-2xl font-black ${activeTab === 'manga' ? 'text-yorumi-manga' : 'text-yorumi-accent'} tracking-tighter`}>stream</span>
+                            </div>
 
-                        <div className="md:hidden">
+                            <div className="md:hidden">
+                                <NavToggle
+                                    activeTab={activeTab}
+                                    onTabChange={onTabChange}
+                                    onClearSearch={onClearSearch}
+                                    variant="mobile"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Desktop Search */}
+                        <div className="hidden md:block max-w-xs w-full">
+                            <SearchBar
+                                ref={searchInputRef}
+                                searchQuery={localSearchQuery}
+                                searchResults={searchResults}
+                                isSearching={isSearching}
+                                onSearchChange={handleLocalSearchChange}
+                                onSearchSubmit={(e) => {
+                                    onSearchSubmit(e, localSearchQuery);
+                                    setLocalSearchQuery('');
+                                }}
+                                onClearSearch={handleClearAndFocus}
+                                onResultSelect={handleResultSelect}
+                                theme={activeTab}
+                            />
+                        </div>
+
+                        {/* Toggle & Random Controls */}
+                        <div className="hidden md:flex items-center gap-6">
                             <NavToggle
                                 activeTab={activeTab}
                                 onTabChange={onTabChange}
                                 onClearSearch={onClearSearch}
-                                variant="mobile"
                             />
+                            <TitleLanguageToggle theme={activeTab} />
+                            <RandomButton
+                                isLoading={isLoadingRandom}
+                                onClick={handleRandom}
+                                theme={activeTab}
+                            />
+                            <button
+                                onClick={() => navigate('/users')}
+                                className="group flex items-center justify-center p-2 text-gray-500 hover:text-white transition-colors"
+                                title="Community"
+                                aria-label="Community"
+                            >
+                                <Users className={`w-5 h-5 transition-all duration-300 ${communityHoverColor} group-hover:-translate-y-0.5 group-hover:scale-110`} />
+                            </button>
                         </div>
                     </div>
 
-                    {/* Desktop Search */}
-                    <div className="hidden md:block max-w-xs w-full">
+                    {/* RIGHT: Login + Mobile Controls */}
+                    <div className="flex items-center justify-end gap-2 md:gap-4 shrink-0">
+                        {/* Mobile Search Icon */}
+                        <button
+                            onClick={() => {
+                                setShowMobileSearch(!showMobileSearch);
+                                setShowMobileMenu(false);
+                            }}
+                            className="md:hidden text-white p-2 md:hover:bg-white/10 active:bg-white/10 rounded-full transition-colors outline-none focus:outline-none"
+                        >
+                            {showMobileSearch ? (
+                                <X className="w-5 h-5" />
+                            ) : (
+                                <Search className="w-5 h-5" />
+                            )}
+                        </button>
+
+                        <NotificationsBell visible={Boolean(user)} theme={activeTab} />
+
+                        <UserMenu
+                            user={user}
+                            avatar={avatar}
+                            activeTab={activeTab}
+                            onLogin={login}
+                            onLogout={logout}
+                        />
+                    </div>
+                </div>
+
+                {/* Mobile Search Bar & Controls Overlay */}
+                <div className={`
+                md:hidden overflow-hidden transition-all duration-300 ease-in-out
+                ${showMobileSearch ? 'max-h-40 opacity-100 border-t border-white/5 bg-yorumi-bg/95 backdrop-blur-md' : 'max-h-0 opacity-0'}
+            `}>
+                    <div className="p-4 space-y-4">
                         <SearchBar
-                            ref={searchInputRef}
                             searchQuery={localSearchQuery}
                             searchResults={searchResults}
                             isSearching={isSearching}
@@ -237,171 +311,97 @@ export default function Navbar({
                             onSearchSubmit={(e) => {
                                 onSearchSubmit(e, localSearchQuery);
                                 setLocalSearchQuery('');
+                                setShowMobileSearch(false);
                             }}
-                            onClearSearch={handleClearAndFocus}
-                            onResultSelect={handleResultSelect}
-                            theme={activeTab}
-                        />
-                    </div>
-
-                    {/* Toggle & Random Controls */}
-                    <div className="hidden md:flex items-center gap-6">
-                        <NavToggle
-                            activeTab={activeTab}
-                            onTabChange={onTabChange}
                             onClearSearch={onClearSearch}
-                        />
-                        <TitleLanguageToggle theme={activeTab} />
-                        <RandomButton
-                            isLoading={isLoadingRandom}
-                            onClick={handleRandom}
+                            onResultSelect={handleMobileResultSelect}
+                            showShortcut={false}
+                            autoFocus={showMobileSearch}
                             theme={activeTab}
                         />
-                        <button
-                            onClick={() => navigate('/users')}
-                            className="group flex items-center justify-center p-2 text-gray-500 hover:text-white transition-colors"
-                            title="Community"
-                            aria-label="Community"
-                        >
-                            <Users className={`w-5 h-5 transition-all duration-300 ${communityHoverColor} group-hover:-translate-y-0.5 group-hover:scale-110`} />
-                        </button>
-                    </div>
-                </div>
 
-                {/* RIGHT: Login + Mobile Controls */}
-                <div className="flex items-center justify-end gap-2 md:gap-4 shrink-0">
-                    {/* Mobile Search Icon */}
-                    <button
-                        onClick={() => {
-                            setShowMobileSearch(!showMobileSearch);
-                            setShowMobileMenu(false);
-                        }}
-                        className="md:hidden text-white p-2 md:hover:bg-white/10 active:bg-white/10 rounded-full transition-colors outline-none focus:outline-none"
-                    >
-                        {showMobileSearch ? (
-                            <X className="w-5 h-5" />
-                        ) : (
-                            <Search className="w-5 h-5" />
-                        )}
-                    </button>
+                        <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
 
-                    <NotificationsBell visible={Boolean(user)} theme={activeTab} />
-
-                    <UserMenu
-                        user={user}
-                        avatar={avatar}
-                        activeTab={activeTab}
-                        onLogin={login}
-                        onLogout={logout}
-                    />
-                </div>
-            </div>
-
-            {/* Mobile Search Bar & Controls Overlay */}
-            <div className={`
-                md:hidden overflow-hidden transition-all duration-300 ease-in-out
-                ${showMobileSearch ? 'max-h-40 opacity-100 border-t border-white/5 bg-yorumi-bg/95 backdrop-blur-md' : 'max-h-0 opacity-0'}
-            `}>
-                <div className="p-4 space-y-4">
-                    <SearchBar
-                        searchQuery={localSearchQuery}
-                        searchResults={searchResults}
-                        isSearching={isSearching}
-                        onSearchChange={handleLocalSearchChange}
-                        onSearchSubmit={(e) => {
-                            onSearchSubmit(e, localSearchQuery);
-                            setLocalSearchQuery('');
-                            setShowMobileSearch(false);
-                        }}
-                        onClearSearch={onClearSearch}
-                        onResultSelect={handleMobileResultSelect}
-                        showShortcut={false}
-                        autoFocus={showMobileSearch}
-                        theme={activeTab}
-                    />
-
-                    <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                            
-                            <TitleLanguageToggle
+                                <TitleLanguageToggle
+                                    variant="mobile"
+                                    onClose={() => setShowMobileSearch(false)}
+                                    theme={activeTab}
+                                />
+                            </div>
+                            <RandomButton
+                                isLoading={isLoadingRandom}
+                                onClick={() => { handleRandom(); setShowMobileSearch(false); }}
                                 variant="mobile"
-                                onClose={() => setShowMobileSearch(false)}
                                 theme={activeTab}
                             />
+                            <button
+                                onClick={() => handleMobileNavigate('/users')}
+                                className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-gray-400 hover:text-white bg-[#1c1c1c] rounded border border-transparent hover:border-white/10 transition-all"
+                            >
+                                <Users className="w-3.5 h-3.5" />
+                                Community
+                            </button>
                         </div>
-                        <RandomButton
-                            isLoading={isLoadingRandom}
-                            onClick={() => { handleRandom(); setShowMobileSearch(false); }}
-                            variant="mobile"
-                            theme={activeTab}
-                        />
-                        <button
-                            onClick={() => handleMobileNavigate('/users')}
-                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-gray-400 hover:text-white bg-[#1c1c1c] rounded border border-transparent hover:border-white/10 transition-all"
-                        >
-                            <Users className="w-3.5 h-3.5" />
-                            Community
-                        </button>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-        <div className={`fixed inset-0 z-[120] transition-all duration-300 ${showMobileMenu ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-            <div
-                onClick={() => setShowMobileMenu(false)}
-                className={`absolute inset-0 menu-backdrop-blur transition-opacity duration-300 ${showMobileMenu ? 'opacity-100 bg-black/55 backdrop-blur-sm' : 'opacity-0'}`}
-            />
-            <aside className={`absolute top-0 left-0 h-full w-[82vw] max-w-[360px] md:w-[360px] menu-panel-blur bg-black/40 border-r border-white/5 backdrop-blur-2xl transition-transform duration-300 flex flex-col ${showMobileMenu ? 'translate-x-0' : '-translate-x-full'}`}>
-                <div className="h-[60px] shrink-0 border-b border-white/5 flex items-center px-3">
-                    <button
-                        onClick={() => setShowMobileMenu(false)}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/90 hover:bg-white/15 transition-colors font-semibold outline-none"
-                    >
-                        <ChevronLeft className="w-4 h-4" />
-                        Close menu
-                    </button>
-                </div>
-
-                <div className="flex-1 min-h-0 overflow-y-auto">
-                    {mobileMenuItems.map((item) => (
+            <div className={`fixed inset-0 z-[120] transition-all duration-300 ${showMobileMenu ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+                <div
+                    onClick={() => setShowMobileMenu(false)}
+                    className={`absolute inset-0 menu-backdrop-blur transition-opacity duration-300 ${showMobileMenu ? 'opacity-100 bg-black/55 backdrop-blur-sm' : 'opacity-0'}`}
+                />
+                <aside className={`absolute top-0 left-0 h-full w-[82vw] max-w-[360px] md:w-[360px] menu-panel-blur bg-black/40 border-r border-white/5 backdrop-blur-2xl transition-transform duration-300 flex flex-col ${showMobileMenu ? 'translate-x-0' : '-translate-x-full'}`}>
+                    <div className="h-[60px] shrink-0 border-b border-white/5 flex items-center px-3">
                         <button
-                            key={item.label}
-                            onClick={() => handleMobileNavigate(item.to)}
-                            className={`w-full text-left px-4 py-6 text-[15px] md:text-[16px] leading-none font-bold tracking-tight text-white/90 hover:bg-white/5 transition-colors border-b border-white/5 outline-none ${activeTab === 'anime' ? 'hover:text-yorumi-accent' : 'hover:text-yorumi-manga'}`}
+                            onClick={() => setShowMobileMenu(false)}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/90 hover:bg-white/15 transition-colors font-semibold outline-none"
                         >
-                            {item.label}
+                            <ChevronLeft className="w-4 h-4" />
+                            Close menu
                         </button>
-                    ))}
+                    </div>
 
-                    <div className="border-b border-white/5">
-                        <button
-                            onClick={() => setShowMobileGenres((v) => !v)}
-                            className={`w-full text-left px-4 py-6 text-[15px] md:text-[16px] leading-none font-bold tracking-tight text-white/90 hover:bg-white/5 transition-colors flex items-center justify-between outline-none ${activeTab === 'anime' ? 'hover:text-yorumi-accent' : 'hover:text-yorumi-manga'}`}
-                        >
-                            Genre
-                            <span className={`text-base transition-transform ${showMobileGenres ? 'rotate-45' : ''}`}>
-                                <Plus className="w-4 h-4" />
-                            </span>
-                        </button>
+                    <div className="flex-1 min-h-0 overflow-y-auto">
+                        {mobileMenuItems.map((item) => (
+                            <button
+                                key={item.label}
+                                onClick={() => handleMobileNavigate(item.to)}
+                                className={`w-full text-left px-4 py-6 text-[15px] md:text-[16px] leading-none font-bold tracking-tight text-white/90 hover:bg-white/5 transition-colors border-b border-white/5 outline-none ${activeTab === 'anime' ? 'hover:text-yorumi-accent' : 'hover:text-yorumi-manga'}`}
+                            >
+                                {item.label}
+                            </button>
+                        ))}
 
-                        <div className={`overflow-hidden transition-all duration-300 ${showMobileGenres ? 'max-h-[320px] pb-4' : 'max-h-0'}`}>
-                            <div className="grid grid-cols-2 gap-y-3 px-4 pt-2">
-                                {mobileGenres.map((genre, idx) => (
-                                    <button
-                                        key={genre}
-                                        onClick={() => handleMobileNavigate(activeTab === 'manga' ? `/manga/genre/${encodeURIComponent(genre)}` : `/genre/${encodeURIComponent(genre)}`)}
-                                        className={`text-left text-[14px] md:text-[15px] font-semibold ${genreColors[idx % genreColors.length]} hover:opacity-80 transition-opacity outline-none`}
-                                    >
-                                        {genre}
-                                    </button>
-                                ))}
+                        <div className="border-b border-white/5">
+                            <button
+                                onClick={() => setShowMobileGenres((v) => !v)}
+                                className={`w-full text-left px-4 py-6 text-[15px] md:text-[16px] leading-none font-bold tracking-tight text-white/90 hover:bg-white/5 transition-colors flex items-center justify-between outline-none ${activeTab === 'anime' ? 'hover:text-yorumi-accent' : 'hover:text-yorumi-manga'}`}
+                            >
+                                Genre
+                                <span className={`text-base transition-transform ${showMobileGenres ? 'rotate-45' : ''}`}>
+                                    <Plus className="w-4 h-4" />
+                                </span>
+                            </button>
+
+                            <div className={`overflow-hidden transition-all duration-300 ${showMobileGenres ? 'max-h-[320px] pb-4' : 'max-h-0'}`}>
+                                <div className="grid grid-cols-2 gap-y-3 px-4 pt-2">
+                                    {mobileGenres.map((genre, idx) => (
+                                        <button
+                                            key={genre}
+                                            onClick={() => handleMobileNavigate(activeTab === 'manga' ? `/manga/genre/${encodeURIComponent(genre)}` : `/genre/${encodeURIComponent(genre)}`)}
+                                            className={`text-left text-[14px] md:text-[15px] font-semibold ${genreColors[idx % genreColors.length]} hover:opacity-80 transition-opacity outline-none`}
+                                        >
+                                            {genre}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </aside>
-        </div>
+                </aside>
+            </div>
         </>
     );
 }
