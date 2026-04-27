@@ -1,9 +1,9 @@
 {
-  "name": "yorumi",
+  "name": "anistream",
   "private": true,
   "version": "0.0.0",
-  "description": "Yorumi - Anime & Manga Streamer",
-  "author": "Yorumi Team",
+  "description": "anistream - Anime & Manga Streamer",
+  "author": "anistream Team",
   "type": "module",
   "scripts": {
     "dev": "vite",
