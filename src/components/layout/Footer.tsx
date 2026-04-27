@@ -44,8 +44,8 @@ const Footer = () => {
                     {/* Logo */}
                     <Link to={isManga ? '/manga' : '/'} className="flex items-center gap-2 group select-none">
                         <div className="flex items-center">
-                            <span className="text-3xl font-black text-white tracking-tighter">YORU</span>
-                            <span className={`text-3xl font-black ${accentColor} tracking-tighter transition-colors duration-300`}>MI</span>
+                            <span className="text-3xl font-black text-white tracking-tighter">An!</span>
+                            <span className={`text-3xl font-black ${accentColor} tracking-tighter transition-colors duration-300`}>stream</span>
                         </div>
                     </Link>
 
@@ -114,16 +114,15 @@ const Footer = () => {
                     <a href="#" className={`transition-colors ${accentHover}`}>Terms of service</a>
                     <a href="#" className={`transition-colors ${accentHover}`}>DMCA</a>
                     <a href="#" className={`transition-colors ${accentHover}`}>Contact</a>
-                    <a href="#" className={`transition-colors ${accentHover}`}>Yorumi App</a>
                 </div>
 
                 {/* Disclaimer & Copyright */}
                 <div className="space-y-2 text-xs text-gray-500 text-center md:text-left">
                     <p>
-                        Yorumi does not store any files on our server, we only linked to the media which is hosted on 3rd party services.
+                        Anistream does not store any files on our server, we only linked to the media which is hosted on 3rd party services.
                     </p>
                     <p>
-                        © yorumi.vercel.app. All rights reserved.
+                        © anistream.online. All rights reserved.
                     </p>
                 </div>
             </div>
