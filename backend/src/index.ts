@@ -11,7 +11,7 @@ const shouldRunStandaloneServer = !process.env.VERCEL;
 
 if (shouldRunStandaloneServer) {
     const startServer = async () => {
-        logger.info('Starting Yorumi backend server');
+        logger.info('Starting Anistream backend server');
 
         try {
             logger.info('Warming anime homepage caches');
