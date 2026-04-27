@@ -52,30 +52,17 @@ const Footer = () => {
                     {/* Separator (Desktop only) */}
                     <div className="hidden md:block w-px h-8 bg-white/10"></div>
 
-                    {/* Social Icons */}
-                    <div className="flex items-center gap-4">
-                        {/* GitHub */}
-                        <a
-                            href="https://github.com/davenarchives/Yorumi"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white transition-all duration-300 hover:bg-[#181717] hover:scale-110"
-                            title="GitHub"
-                        >
-                            <Github size={20} fill="currentColor" strokeWidth={0} />
-                        </a>
-
                         {/* Ko-fi */}
                         <a
-                            href="https://ko-fi.com/davenarchives"
+                            href="https://instagram.com/anistream.online"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white transition-all duration-300 hover:bg-[#29ABE0] hover:scale-110"
-                            title="Ko-fi"
+                            title="Instagram"
                         >
                             <img
-                                src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/670f5a01229bf8a18f97a3c1_favion.png"
-                                alt="Ko-fi"
+                                src="https://upload.wikimedia.org/wikipedia/commons/2/28/Instagram_logo.png"
+                                alt="Instagram"
                                 className="w-5 h-5 object-contain"
                             />
                         </a>
