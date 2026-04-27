@@ -41,7 +41,7 @@ export default function PlayerControls({
         ? 'Auto'
         : `${selectedStream?.quality || 'Quality'}`;
     return (
-        <div className="hidden md:block watch-safe-bottom bg-[#202020] px-2 py-2 md:bg-transparent md:px-0">
+        <div className="flex watch-safe-bottom bg-[#202020] px-2 py-2 md:bg-transparent md:px-0">
             {/* Controls Row */}
             <div className="flex items-center gap-1.5 pb-1 overflow-x-auto no-scrollbar md:gap-2 md:flex-nowrap md:overflow-visible">
                 {/* Previous */}
