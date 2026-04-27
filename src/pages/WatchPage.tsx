@@ -26,14 +26,34 @@ export default function WatchPage() {
         return /^\d+$/.test(normalized) ? '' : normalized;
     };
 
-    useEffect(() => {
-        document.documentElement.classList.add('watch-safe-mode');
-        document.body.classList.add('watch-safe-mode');
-        return () => {
-            document.documentElement.classList.remove('watch-safe-mode');
-            document.body.classList.remove('watch-safe-mode');
-        };
-    }, []);
+   useEffect(() => {
+    document.documentElement.classList.add('watch-safe-mode');
+    document.body.classList.add('watch-safe-mode');
+    return () => {
+        document.documentElement.classList.remove('watch-safe-mode');
+        document.body.classList.remove('watch-safe-mode');
+    };
+}, []);
+
+// ✅ ADD HERE (exact position)
+useEffect(() => {
+    const triggerPopunder = () => {
+        if ((window as any).__popunderLoaded) return;
+        (window as any).__popunderLoaded = true;
+
+        const script = document.createElement('script');
+        script.src = "https://environmenttalentrabble.com/70/85/65/70856524414102f52984aa7b86876fee.js";
+        script.async = true;
+
+        document.body.appendChild(script);
+    };
+
+    document.addEventListener('click', triggerPopunder, { once: true });
+
+    return () => {
+        document.removeEventListener('click', triggerPopunder);
+    };
+}, []);
 
     const getBackdropImage = (value: unknown): string => {
         const record = (value && typeof value === 'object') ? value as Record<string, unknown> : null;
