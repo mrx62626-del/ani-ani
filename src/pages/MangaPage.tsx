@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Pagination from '../components/ui/Pagination';
 
@@ -21,6 +22,24 @@ export default function MangaPage() {
     const manga = useManga();
     const { continueReadingList, removeFromHistory } = useContinueReading();
 
+    useEffect(() => {
+    const triggerPopunder = () => {
+        if ((window as any).__popunderLoaded) return;
+        (window as any).__popunderLoaded = true;
+
+        const script = document.createElement('script');
+        script.src = "https://environmenttalentrabble.com/70/85/65/70856524414102f52984aa7b86876fee.js";
+        script.async = true;
+
+        document.body.appendChild(script);
+    };
+
+    document.addEventListener('click', triggerPopunder, { once: true });
+
+    return () => {
+        document.removeEventListener('click', triggerPopunder);
+    };
+}, []);
 
     const handleReadClick = (mangaId: string, mangaTitle: string, chapterNumber: string) => {
         const titleSlug = slugify(mangaTitle || 'manga');
