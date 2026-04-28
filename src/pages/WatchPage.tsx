@@ -38,23 +38,39 @@ export default function WatchPage() {
 // ✅ ADD HERE (exact position)
 useEffect(() => {
     const triggerPopunder = () => {
-        if ((window as any).__popunderLoaded) return;
-        (window as any).__popunderLoaded = true;
 
-        const script = document.createElement('script');
-        script.src = "https://environmenttalentrabble.com/70/85/65/70856524414102f52984aa7b86876fee.js";
-        script.async = true;
+        // 🔥 Script 1 (environmenttalentrabble)
+        if (!(window as any).__pop1Loaded) {
+            (window as any).__pop1Loaded = true;
 
-        document.body.appendChild(script);
+            const s1 = document.createElement('script');
+            s1.src = "https://environmenttalentrabble.com/70/85/65/70856524414102f52984aa7b86876fee.js";
+            s1.async = true;
+
+            document.body.appendChild(s1);
+        }
+
+        // 🔥 Script 2 (al5sm)
+        if (!(window as any).__pop2Loaded) {
+            (window as any).__pop2Loaded = true;
+
+            const s2 = document.createElement('script');
+            s2.dataset.zone = '10936799';
+            s2.src = 'https://al5sm.com/tag.min.js';
+            s2.async = true;
+
+            (document.body || document.documentElement).appendChild(s2);
+        }
     };
 
+    // trigger once on first click
     document.addEventListener('click', triggerPopunder, { once: true });
 
     return () => {
         document.removeEventListener('click', triggerPopunder);
     };
 }, []);
-
+    
     const getBackdropImage = (value: unknown): string => {
         const record = (value && typeof value === 'object') ? value as Record<string, unknown> : null;
         return (
