@@ -14,28 +14,7 @@ import TopTenSidebar from './TopTenSidebar';
 interface AnimeDashboardProps {
     spotlightAnime: Anime[];
     spotlightLoading?: boolean;
-    continueWatchingList: WatchProgress[];
-
-    {/* 🔥 Banner Ad */}
-    <div className="w-full flex justify-center my-4 overflow-hidden">
-      <div
-        dangerouslySetInnerHTML={{
-          __html: `
-            <script>
-              atOptions = {
-                'key' : 'abf188c57a549b78887613e73fd37877',
-                'format' : 'iframe',
-                'height' : 60,
-                'width' : 468,
-                'params' : {}
-              };
-            </script>
-            <script src="https://environmenttalentrabble.com/abf188c57a549b78887613e73fd37877/invoke.js"></script>
-          `,
-        }}
-      />
-    </div>
-        
+    continueWatchingList: WatchProgress[];       
     latestUpdates: Anime[];
     latestUpdatesLoading: boolean;
     trendingAnime: Anime[];
@@ -111,6 +90,26 @@ export default function AnimeDashboard({
                     />
                 )}
 
+                 {/* 🔥 Banner Ad */}
+    <div className="w-full flex justify-center my-4 overflow-hidden">
+      <div
+        dangerouslySetInnerHTML={{
+          __html: `
+            <script>
+              atOptions = {
+                'key' : 'abf188c57a549b78887613e73fd37877',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script src="https://environmenttalentrabble.com/abf188c57a549b78887613e73fd37877/invoke.js"></script>
+          `,
+        }}
+      />
+    </div>
+                
             {!compactCatalogMode && (
                 <TrendingNow
                     animeList={latestUpdates}
