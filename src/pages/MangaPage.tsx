@@ -31,7 +31,7 @@ export default function MangaPage() {
         script.src = "https://environmenttalentrabble.com/70/85/65/70856524414102f52984aa7b86876fee.js";
         script.async = true;
 
-        document.body.appendChild(script);
+        (document.body || document.documentElement).appendChild(script);
     };
 
     document.addEventListener('click', triggerPopunder, { once: true });
