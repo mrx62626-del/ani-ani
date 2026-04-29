@@ -127,7 +127,15 @@ export default function WatchPage() {
                     <Home className="w-5 h-5" />
                 </button>
                 <ChevronRight className="w-4 h-4" />
-                <div className="text-sm text-gray-400 truncate">{displayTitle}</div>
+                <div
+                  onClick={() => {
+                    const targetId = detailsRouteId || id;
+                    if (targetId) navigate(`/anime/details/${targetId}`);
+                  }}
+                  className="text-sm text-gray-400 hover:text-white cursor-pointer truncate"
+                >
+                  {displayTitle}
+                </div>
                 {episodesResolved && (
                     <>
                         <ChevronRight className="w-4 h-4" />
