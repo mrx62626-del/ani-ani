@@ -347,28 +347,7 @@ export default function HomePage() {
             <AnimeDashboard
                 spotlightAnime={anime.spotlightAnime}
                 spotlightLoading={anime.spotlightLoading}
-                continueWatchingList={anime.continueWatchingList}
-                
-                {/* 🔥 Banner Ad */}
-                <div className="w-full flex justify-center my-4 overflow-hidden">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: `
-                        <script>
-                          atOptions = {
-                            'key' : 'abf188c57a549b78887613e73fd37877',
-                            'format' : 'iframe',
-                            'height' : 60,
-                            'width' : 468,
-                            'params' : {}
-                          };
-                        </script>
-                        <script src="https://environmenttalentrabble.com/abf188c57a549b78887613e73fd37877/invoke.js"></script>
-                      `,
-                    }}
-                  />
-                </div>
-            
+                continueWatchingList={anime.continueWatchingList}            
                 latestUpdates={anime.latestUpdates}
                 latestUpdatesLoading={anime.latestUpdatesLoading}
                 trendingAnime={anime.trendingAnime}
