@@ -46,7 +46,7 @@ export default function WatchPage() {
         };
     }, []);
 
-    // ✅ SIDEBAR BANNER (above "Currently Airing")
+    // ✅ SIDEBAR BANNER
     useEffect(() => {
         if (!sidebarAdRef.current) return;
 
@@ -115,12 +115,32 @@ export default function WatchPage() {
         return <div className="text-red-500">{error}</div>;
     }
 
+    const displayTitle = getDisplayTitle(anime as any, language);
+    const detailsRouteId = getAnimeDetailsRouteId(anime || {});
+
     return (
         <div className="watch-viewport relative flex flex-col w-full bg-[#0a0a0a] text-white overflow-hidden pt-14">
 
+            {/* HEADER */}
+            <div className="flex items-center gap-3 px-4 md:px-10 mb-4">
+                <button onClick={() => navigate('/')}>
+                    <Home className="w-5 h-5" />
+                </button>
+                <ChevronRight className="w-4 h-4" />
+                <div className="text-sm text-gray-400 truncate">{displayTitle}</div>
+                {episodesResolved && (
+                    <>
+                        <ChevronRight className="w-4 h-4" />
+                        <div className="text-sm font-bold truncate">
+                            {cleanCurrentTitle || `Episode ${epNum}`}
+                        </div>
+                    </>
+                )}
+            </div>
+
             <div className="flex-1 flex flex-col md:flex-row gap-6 px-4 md:px-10">
 
-                {/* LEFT SIDE (PLAYER) */}
+                {/* PLAYER */}
                 <div className="flex-1 flex flex-col">
                     <div className="aspect-video">
                         <VideoPlayer
@@ -157,11 +177,11 @@ export default function WatchPage() {
                     />
                 </div>
 
-                {/* RIGHT SIDE (EPISODES + AD) */}
+                {/* SIDEBAR */}
                 {!isExpanded && (
                     <div className="flex flex-col w-full md:w-[340px] shrink-0">
 
-                        {/* 🔥 AD HERE (above Currently Airing) */}
+                        {/* 🔥 AD ABOVE CURRENT AIRING */}
                         <div className="w-full flex justify-center mb-3">
                             <div ref={sidebarAdRef} />
                         </div>
