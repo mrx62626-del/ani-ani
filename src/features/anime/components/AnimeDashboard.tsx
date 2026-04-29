@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Anime } from '../../../types/anime';
 import type { WatchProgress } from '../../../utils/storage';
@@ -14,7 +15,7 @@ import TopTenSidebar from './TopTenSidebar';
 interface AnimeDashboardProps {
     spotlightAnime: Anime[];
     spotlightLoading?: boolean;
-    continueWatchingList: WatchProgress[];       
+    continueWatchingList: WatchProgress[];
     latestUpdates: Anime[];
     latestUpdatesLoading: boolean;
     trendingAnime: Anime[];
@@ -65,6 +66,37 @@ export default function AnimeDashboard({
     onAnimeHover
 }: AnimeDashboardProps) {
     const navigate = useNavigate();
+    const adRef = useRef<HTMLDivElement | null>(null);
+
+    // ✅ Load ad script properly
+    useEffect(() => {
+        if (!adRef.current) return;
+
+        // Clear previous (avoid duplicates)
+        adRef.current.innerHTML = '';
+
+        const script1 = document.createElement('script');
+        script1.innerHTML = `
+            atOptions = {
+                key: 'abf188c57a549b78887613e73fd37877',
+                format: 'iframe',
+                height: 60,
+                width: 468,
+                params: {}
+            };
+        `;
+
+        const script2 = document.createElement('script');
+        script2.src = "https://environmenttalentrabble.com/abf188c57a549b78887613e73fd37877/invoke.js";
+        script2.async = true;
+
+        adRef.current.appendChild(script1);
+        adRef.current.appendChild(script2);
+
+        return () => {
+            if (adRef.current) adRef.current.innerHTML = '';
+        };
+    }, []);
 
     return (
         <>
@@ -79,7 +111,8 @@ export default function AnimeDashboard({
             )}
 
             <div className={`container mx-auto px-4 z-10 relative ${compactCatalogMode ? '' : 'mt-8'}`}>
-                {/* Continue Watching Carousel */}
+
+                {/* Continue Watching */}
                 {!compactCatalogMode && continueWatchingList.length > 0 && (
                     <ContinueWatching
                         items={continueWatchingList}
@@ -90,66 +123,53 @@ export default function AnimeDashboard({
                     />
                 )}
 
-                 {/* 🔥 Banner Ad */}
-    <div className="w-full flex justify-center my-4 overflow-hidden">
-      <div
-        dangerouslySetInnerHTML={{
-          __html: `
-            <script>
-              atOptions = {
-                'key' : 'abf188c57a549b78887613e73fd37877',
-                'format' : 'iframe',
-                'height' : 60,
-                'width' : 468,
-                'params' : {}
-              };
-            </script>
-            <script src="https://environmenttalentrabble.com/abf188c57a549b78887613e73fd37877/invoke.js"></script>
-          `,
-        }}
-      />
-    </div>
-                
-            {!compactCatalogMode && (
-                <TrendingNow
-                    animeList={latestUpdates}
-                    title="Latest Updates"
-                    isLoading={latestUpdatesLoading}
-                    onAnimeClick={onAnimeClick}
-                    onWatchClick={onWatchClick}
-                    onViewAll={() => onViewAll('latest')}
-                    onMouseEnter={onAnimeHover}
-                />
-            )}
+                {/* 🔥 Banner Ad */}
+                <div className="w-full flex justify-center my-4 overflow-hidden">
+                    <div ref={adRef} />
+                </div>
 
-            {!compactCatalogMode && (
-                <TrendingNow
-                    animeList={trendingAnime}
-                    isLoading={trendingLoading}
-                    onAnimeClick={onAnimeClick}
-                    onWatchClick={onWatchClick}
-                    onViewAll={() => onViewAll('trending')}
-                    onMouseEnter={onAnimeHover}
-                />
-            )}
+                {!compactCatalogMode && (
+                    <TrendingNow
+                        animeList={latestUpdates}
+                        title="Latest Updates"
+                        isLoading={latestUpdatesLoading}
+                        onAnimeClick={onAnimeClick}
+                        onWatchClick={onWatchClick}
+                        onViewAll={() => onViewAll('latest')}
+                        onMouseEnter={onAnimeHover}
+                    />
+                )}
 
-            {!compactCatalogMode && (
-                <PopularSeason
-                    animeList={popularSeason}
-                    isLoading={popularSeasonLoading}
-                    onAnimeClick={onAnimeClick}
-                    onWatchClick={onWatchClick}
-                    onViewAll={() => onViewAll('seasonal')}
-                    onMouseEnter={onAnimeHover}
-                />
-            )}
+                {!compactCatalogMode && (
+                    <TrendingNow
+                        animeList={trendingAnime}
+                        isLoading={trendingLoading}
+                        onAnimeClick={onAnimeClick}
+                        onWatchClick={onWatchClick}
+                        onViewAll={() => onViewAll('trending')}
+                        onMouseEnter={onAnimeHover}
+                    />
+                )}
 
-                {/* All-Time Popular + Top 10 + Schedule + Genres */}
+                {!compactCatalogMode && (
+                    <PopularSeason
+                        animeList={popularSeason}
+                        isLoading={popularSeasonLoading}
+                        onAnimeClick={onAnimeClick}
+                        onWatchClick={onWatchClick}
+                        onViewAll={() => onViewAll('seasonal')}
+                        onMouseEnter={onAnimeHover}
+                    />
+                )}
+
+                {/* Bottom Section */}
                 <div className="container mx-auto px-4 pt-4">
                     <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
                         <div data-hover-boundary>
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-xl font-bold border-l-4 border-yorumi-accent pl-3 text-white">{allTimeTitle}</h2>
+                                <h2 className="text-xl font-bold border-l-4 border-yorumi-accent pl-3 text-white">
+                                    {allTimeTitle}
+                                </h2>
                             </div>
 
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -175,6 +195,7 @@ export default function AnimeDashboard({
                                     ))
                                 )}
                             </div>
+
                             {showEstimatedSchedule && (
                                 <div className="mt-4">
                                     <EstimatedSchedule onAnimeClick={(id) => navigate(`/anime/${id}`)} />
@@ -190,7 +211,9 @@ export default function AnimeDashboard({
                                 isLoading={topTenLoading}
                                 onAnimeClick={onAnimeClick}
                             />
-                            {showGenres && <Genres onGenreClick={(genre) => navigate(`/genre/${encodeURIComponent(genre)}`)} />}
+                            {showGenres && (
+                                <Genres onGenreClick={(genre) => navigate(`/genre/${encodeURIComponent(genre)}`)} />
+                            )}
                         </div>
                     </div>
                 </div>
