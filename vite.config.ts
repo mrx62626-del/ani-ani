@@ -9,11 +9,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/avatars': {
-        target: 'http://localhost:3001',
+        target: 'https://backend-6iua.onrender.com',
         changeOrigin: true,
       },
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'https://backend-6iua.onrender.com',
         changeOrigin: true,
       }
     }
